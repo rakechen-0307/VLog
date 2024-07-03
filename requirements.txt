@@ -1,6 +1,6 @@
 --extra-index-url https://download.pytorch.org/whl
 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html
-detectron2
+detectron2==0.6
 transformers
 timm
 openai
