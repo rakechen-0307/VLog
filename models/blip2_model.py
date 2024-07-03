@@ -17,7 +17,7 @@ class ImageCaptioner:
         if self.model_name == "blip2-opt":
             processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b-coco")
             model = Blip2ForConditionalGeneration.from_pretrained(
-                "Salesforce/blip2-opt-2.7b-coco", torch_dtype=self.data_type, low_cpu_mem_usage=True)
+                "Salesforce/blip2-opt-2.7b-coco", torch_dtype=self.data_type, low_cpu_mem_usage=False)
             
         elif self.model_name == "blip2-flan-t5":
             processor = Blip2Processor.from_pretrained("Salesforce/blip2-flan-t5-xl")
