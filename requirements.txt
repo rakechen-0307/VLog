@@ -1,7 +1,4 @@
 --extra-index-url https://download.pytorch.org/whl
-torch
-torchvision
-torchaudio
 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html
 detectron2
 transformers
@@ -27,4 +24,4 @@ unstructured
 faiss-cpu
 faiss-gpu
 yt-dlp
-Pillow
+Pillow==7.1.2
