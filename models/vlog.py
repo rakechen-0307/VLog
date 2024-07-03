@@ -12,7 +12,6 @@ from models.clip_model import FeatureExtractor
 from models.blip2_model import ImageCaptioner
 from models.grit_model import DenseCaptioner
 from models.whisper_model import AudioTranslator
-from models.gpt_model import LlmReasoner
 from utils.utils import logger_creator, format_time
 
 
@@ -24,7 +23,6 @@ class Vlogger :
         self.data_dir = args.data_dir
         self.tmp_dir = args.tmp_dir
         self.models_flag = False
-        self.init_llm()
         if not os.path.exists(self.tmp_dir):
             os.makedirs(self.tmp_dir)
         
@@ -38,23 +36,10 @@ class Vlogger :
         self.dense_captioner = DenseCaptioner(device=self.args.dense_captioner_device)
         self.audio_translator = AudioTranslator(model=self.args.audio_translator, device=self.args.audio_translator_device)
         print('\033[1;32m' + "Model initialization finished!".center(50, '-') + '\033[0m')
-    
-    def init_llm(self):
-        print('\033[1;33m' + "Initializing LLM Reasoner...".center(50, '-') + '\033[0m')
-        os.environ["OPENAI_API_KEY"] = self.args.openai_api_key
-        self.llm_reasoner = LlmReasoner(self.args)
-        print('\033[1;32m' + "LLM initialization finished!".center(50, '-') + '\033[0m')
 
     def video2log(self, video_path): 
         video_path = video_path
-        video_id = os.path.basename(video_path).split('.')[0]
-        if self.llm_reasoner.exist_vectorstore(video_id):
-            return self.printlog(video_id)
-        try:
-            self.llm_reasoner.create_vectorstore(video_id)
-            return self.printlog(video_id)
-        except:
-            pass        
+        video_id = os.path.basename(video_path).split('.')[0]     
 
         if not self.models_flag:
             self.init_models()
@@ -89,7 +74,6 @@ class Vlogger :
                 logger.info("\n")
         
         cap.release()
-        self.llm_reasoner.create_vectorstore(video_id)
         return self.printlog(video_id)
         
     def printlog(self, video_id):
@@ -99,11 +83,3 @@ class Vlogger :
             for line in f:
                 log_list.append(line.strip())
         return log_list
-    
-    def chat2video(self, user_input):
-        response = self.llm_reasoner(user_input)
-        return response
-
-    def clean_history(self):
-        self.llm_reasoner.clean_history()
-        return
